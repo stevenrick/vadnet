@@ -1,0 +1,5 @@
+bin/
+ssi.log
+ssi_last.err
+__pycache__/
+options/
