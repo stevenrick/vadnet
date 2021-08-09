@@ -9,9 +9,11 @@ Returns energy of a signal (dimensionwise or overall)
 
 import sys, os, json, argparse, glob
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import numpy as np
 import librosa as lr
+import soundfile as sf
 
 
 def audio_from_file(path, sr=None, ext=''):
@@ -19,7 +21,7 @@ def audio_from_file(path, sr=None, ext=''):
 
 
 def audio_to_file(path, x, sr):    
-    lr.output.write_wav(path, x.reshape(-1), sr, norm=False)   
+    sf.write(path, x.reshape(-1), sr, 'PCM_24')   
 
 
 def audio_to_frames(x, n_frame, n_step=None):    
