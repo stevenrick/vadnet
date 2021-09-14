@@ -9,6 +9,7 @@ import sys, os, json, glob
 #os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 import tensorflow as tf
+tf.compat.v1.disable_v2_behavior()
 import numpy as np
 
 
