@@ -130,6 +130,9 @@ def extract_voice(path, files, n_batch=256):
                     speech = input[np.argwhere(labels==1),:].reshape(-1,1)
 
                     speech_segs = np.argwhere(labels==1)
+                    if len(speech_segs) == 0:
+                        print("no speech detected")
+                        continue
                     # noise_segs = np.argwhere(labels==0)
                     speech_windows = continuous_windows(speech_segs)
                     # continuous_windows(noise_segs)
@@ -166,7 +169,7 @@ parser.add_argument('--n_batch',
 if __name__ == '__main__':
 
     model = "models\\vad"
-    directory = "D:\\steve\\Documents\\Downloads\\EF  Data"
+    directory = "D:\\steve\\Documents\\Downloads\\QUICK_VA_Audio"
     files = [os.path.join(directory, f) for f in os.listdir(directory)]
     batch_size = 256
 
