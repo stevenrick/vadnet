@@ -60,7 +60,7 @@ def continuous_windows(x):
     # print(windows)
     return windows
 
-def extract_voice(path, files, n_batch=256):
+def extract_voice(path, files, n_batch=256, outDirectory=""):
 
     out_df = pd.DataFrame(columns=["File", "SpeechWindows"])
 
@@ -140,13 +140,20 @@ def extract_voice(path, files, n_batch=256):
                     out_df.loc[idx] = [file.split(os.sep)[-1]] + [speech_windows]
                     idx += 1
 
-                    name, ext = os.path.splitext(file)
+                    if outDirectory != "":
+                        outPath = os.path.join(outDirectory, os.path.basename(file))
+                        name, ext = os.path.splitext(outPath)
+                    else:
+                        name, ext = os.path.splitext(file)
                     audio_to_file(os.path.join(name + '.speech' + ext), speech, sr)
                     # audio_to_file(os.path.join(name + '.noise' + ext), noise, sr)
 
                 else:
-                    print('skip [file not found]')       
-    out_df.to_csv(os.path.join(directory,"speech_segments.csv"), index=False)
+                    print('skip [file not found]')
+    if outDirectory != "":
+        out_df.to_csv(os.path.join(outDirectory,"speech_segments.csv"), index=False)
+    else:
+        out_df.to_csv(os.path.join(directory,"speech_segments.csv"), index=False)
 
 
 parser = argparse.ArgumentParser()
@@ -172,5 +179,6 @@ if __name__ == '__main__':
     directory = "D:\\steve\\Documents\\Downloads\\QUICK_VA_Audio"
     files = [os.path.join(directory, f) for f in os.listdir(directory)]
     batch_size = 256
+    outDirectory = ""
 
-    extract_voice(model, files, n_batch=batch_size)
+    extract_voice(path=model, files=files)
