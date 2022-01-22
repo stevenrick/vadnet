@@ -109,7 +109,7 @@ def extract_voice(path, files, n_batch=256, outDirectory=""):
             idx = 0
             for file in files:
 
-                print('processing {}'.format(file), flush=True)
+                print('extract_voice: {}'.format(file), flush=True)
                 
                 if os.path.exists(file):
                     sound, _ = audio_from_file(file, sr=sr)
@@ -148,12 +148,15 @@ def extract_voice(path, files, n_batch=256, outDirectory=""):
                     audio_to_file(os.path.join(name + '.speech' + ext), speech, sr)
                     # audio_to_file(os.path.join(name + '.noise' + ext), noise, sr)
 
+                    if outDirectory != "":
+                        hdr = False  if os.path.isfile(os.path.join(outDirectory,"speech_segments.csv")) else True
+                        out_df.to_csv(os.path.join(outDirectory,"speech_segments.csv"), mode='a', header=hdr, index=False)
+                    else:
+                        hdr = False  if os.path.isfile(os.path.join(directory,"speech_segments.csv")) else True
+                        out_df.to_csv(os.path.join(directory,"speech_segments.csv"), mode='a', header=hdr, index=False)
+
                 else:
                     print('skip [file not found]')
-    if outDirectory != "":
-        out_df.to_csv(os.path.join(outDirectory,"speech_segments.csv"), index=False)
-    else:
-        out_df.to_csv(os.path.join(directory,"speech_segments.csv"), index=False)
 
 
 parser = argparse.ArgumentParser()
